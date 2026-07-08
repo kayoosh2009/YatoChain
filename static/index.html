@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTab Mining</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .stats {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .mining-status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            text-align: center;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+        
+        .mining-status.active {
+            background: #fff3e0;
+            color: #e65100;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⛏️ WebTab Mining</h1>
+        
+        <div id="registration">
+            <div class="input-group">
+                <label for="wallet">Ваш Solana кошелек:</label>
+                <input 
+                    type="text" 
+                    id="wallet" 
+                    placeholder="Введите ваш Solana адрес"
+                >
+            </div>
+            <button onclick="registerWallet()">Начать майнинг</button>
+        </div>
+        
+        <div id="mining" style="display: none;">
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Ваш баланс:</span>
+                    <span class="stat-value" id="balance">0.00000</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Найдено хешей:</span>
+                    <span class="stat-value" id="hashes">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Сложность:</span>
+                    <span class="stat-value" id="difficulty">2</span>
+                </div>
+            </div>
+            
+            <div class="mining-status" id="miningStatus">
+                Готов к майнингу...
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let walletAddress = '';
+        let miningInterval = null;
+        
+        async function registerWallet() {
+            const wallet = document.getElementById('wallet').value.trim();
+            if (!wallet) {
+                alert('Введите адрес кошелька');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ wallet_address: wallet })
+                });
+                
+                if (response.ok) {
+                    walletAddress = wallet;
+                    document.getElementById('registration').style.display = 'none';
+                    document.getElementById('mining').style.display = 'block';
+                    startMining();
+                }
+            } catch (error) {
+                console.error('Ошибка регистрации:', error);
+            }
+        }
+        
+        async function startMining() {
+            while (true) {
+                try {
+                    // Получаем задачу
+                    const taskResponse = await fetch('/api/mining');
+                    const task = await taskResponse.json();
+                    
+                    document.getElementById('difficulty').textContent = task.difficulty;
+                    document.getElementById('miningStatus').textContent = 'Майнинг...';
+                    document.getElementById('miningStatus').classList.add('active');
+                    
+                    // Решаем задачу
+                    const solution = solveChallenge(task.challenge, task.difficulty);
+                    
+                    // Отправляем решение
+                    const solutionResponse = await fetch('/api/solution', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            wallet_address: walletAddress,
+                            nonce: solution.nonce,
+                            hash: solution.hash
+                        })
+                    });
+                    
+                    const result = await solutionResponse.json();
+                    
+                    if (result.success) {
+                        // Обновляем статистику
+                        updateStats();
+                    }
+                    
+                    // Небольшая пауза перед следующей задачей
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                } catch (error) {
+                    console.error('Ошибка майнинга:', error);
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                }
+            }
+        }
+        
+        async function solveChallenge(challenge, difficulty) {
+            const requiredPrefix = '0'.repeat(difficulty);
+            let nonce = 0;
+            
+            while (true) {
+                const data = challenge + nonce;
+                const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(data));
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+                
+                if (hashHex.startsWith(requiredPrefix)) {
+                    return { nonce, hash: hashHex };
+                }
+                
+                nonce++;
+                
+                // Каждые 1000 итераций даем браузеру передышку
+                if (nonce % 1000 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }
+            }
+        }
+        
+        async function updateStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const stats = await response.json();
+                
+                // Здесь можно добавить логику для отображения личной статистики
+                document.getElementById('hashes').textContent = stats.total_hashes;
+            } catch (error) {
+                console.error('Ошибка получения статистики:', error);
+            }
+        }
+    </script>
+</body>
+</html>
