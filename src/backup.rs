@@ -1,16 +1,23 @@
 use crate::AppState;
+use base64::{engine::general_purpose::STANDARD, Engine as _};
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 pub async fn start_backup_monitor(state: AppState) {
-    let backup_interval = Duration::from_secs(60); // Проверяем каждую минуту
-    let inactivity_threshold = Duration::from_secs(300); // 5 минут неактивности
+    let backup_interval = Duration::from_secs(60);
+    let inactivity_threshold = Duration::from_secs(300);
     
     loop {
         tokio::time::sleep(backup_interval).await;
         
-        let mining_state = state.mining_state.lock().unwrap();
-        let last_activity = mining_state.last_activity;
-        drop(mining_state);
+        // Копируем нужные данные ДО await
+        let (last_activity, current_challenge, difficulty) = {
+            let mining_state = state.mining_state.lock().unwrap();
+            (
+                mining_state.last_activity,
+                mining_state.current_challenge.clone(),
+                mining_state.difficulty,
+            )
+        }; // Guard освобождается здесь
         
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
@@ -27,22 +34,18 @@ pub async fn start_backup_monitor(state: AppState) {
 }
 
 async fn create_backup_and_push() -> Result<(), Box<dyn std::error::Error>> {
-    // Читаем файл БД
     let db_path = "webtab_mining.db";
     if !std::path::Path::new(db_path).exists() {
         return Ok(());
     }
     
     let db_content = tokio::fs::read(db_path).await?;
-    let encoded = base64::encode(&db_content);
+    let encoded = STANDARD.encode(&db_content); // Новый синтаксис
     
-    // Получаем токен из .env
     let github_token = std::env::var("GITHUB_TOKEN")
         .expect("GITHUB_TOKEN не установлен в .env");
     
     let client = reqwest::Client::new();
-    
-    // Получаем текущий SHA файла (если существует)
     let repo = "kayoosh2009/WebTab-Mining";
     let path = "webtab_mining.db";
     let branch = "main";
@@ -63,7 +66,6 @@ async fn create_backup_and_push() -> Result<(), Box<dyn std::error::Error>> {
         .ok()
         .and_then(|v| v.get("sha").and_then(|s| s.as_str().map(String::from)));
     
-    // Создаем или обновляем файл
     let mut body = serde_json::json!({
         "message": format!("Auto backup {}", chrono::Utc::now().to_rfc3339()),
         "content": encoded,
@@ -121,7 +123,7 @@ pub async fn download_from_github() -> Result<(), Box<dyn std::error::Error>> {
         let json: serde_json::Value = response.json().await?;
         
         if let Some(content) = json.get("content").and_then(|c| c.as_str()) {
-            let decoded = base64::decode(content)?;
+            let decoded = STANDARD.decode(content)?; // Новый синтаксис
             tokio::fs::write("webtab_mining.db", decoded).await?;
             println!("✅ База данных скачана из GitHub");
         }
