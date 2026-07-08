@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,196 +13,396 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #111111;
+            color: #E8E8E8;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            padding: 40px;
         }
         
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            height: calc(100vh - 80px);
         }
         
-        h1 {
-            color: #667eea;
-            margin-bottom: 30px;
-            text-align: center;
+        /* Left Panel */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
         
-        .input-group {
-            margin-bottom: 20px;
+        .stats-box {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 30px;
+            flex: 1;
         }
         
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
+        .stats-box h2 {
+            color: #E8E8E8;
+            margin-bottom: 25px;
+            font-size: 24px;
             font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-        }
-        
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        
-        .stats {
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
         }
         
         .stat-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
         }
         
         .stat-label {
-            color: #666;
+            color: #888;
+            font-size: 16px;
         }
         
         .stat-value {
+            color: #E8E8E8;
+            font-size: 22px;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .control-box {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 30px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 0;
+        }
+        
+        input {
+            flex: 1;
+            padding: 16px 20px;
+            background: #0a0a0a;
+            border: 2px solid #2a2a2a;
+            border-radius: 10px;
+            color: #E8E8E8;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #00ff88;
+            background: #111;
+        }
+        
+        input::placeholder {
+            color: #555;
+        }
+        
+        button {
+            padding: 16px 32px;
+            background: #00ff88;
+            color: #111;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        button:hover {
+            background: #00cc6a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button.stop {
+            background: #ff4444;
+            color: #fff;
+        }
+        
+        button.stop:hover {
+            background: #cc3636;
+            box-shadow: 0 8px 20px rgba(255, 68, 68, 0.3);
+        }
+        
+        /* Right Panel - Blockchain Visualization */
+        .right-panel {
+            background: #1a1a1a;
+            border: 2px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .right-panel h2 {
+            color: #E8E8E8;
+            margin-bottom: 25px;
+            font-size: 24px;
             font-weight: 600;
-            color: #667eea;
+            position: relative;
+            z-index: 10;
         }
         
-        .mining-status {
-            margin-top: 20px;
-            padding: 15px;
-            background: #e8f5e9;
-            border-radius: 8px;
-            text-align: center;
-            color: #2e7d32;
-            font-weight: 500;
+        .blockchain-container {
+            position: relative;
+            width: 100%;
+            height: calc(100% - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 20px;
+            perspective: 1000px;
         }
         
-        .mining-status.active {
-            background: #fff3e0;
-            color: #e65100;
+        .block {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+            border-radius: 12px;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: blockAppear 0.5s ease-out, blockFade 2s ease-in forwards;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 136, 0.4),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #111;
+            font-size: 14px;
+        }
+        
+        .block::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+            border-radius: 12px;
+        }
+        
+        @keyframes blockAppear {
+            from {
+                opacity: 0;
+                transform: translateX(100px) rotateY(-90deg) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) rotateY(0) scale(1);
+            }
+        }
+        
+        @keyframes blockFade {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.1);
+                box-shadow: 0 0 40px rgba(0, 255, 136, 0.8);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.3) translateY(-50px);
+            }
+        }
+        
+        .mining-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: #0a0a0a;
+            border-radius: 10px;
+            border: 1px solid #2a2a2a;
+            z-index: 10;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #555;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+        
+        .status-dot.active {
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .status-text {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .status-text.active {
+            color: #00ff88;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .right-panel {
+                min-height: 400px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⛏️ WebTab Mining</h1>
-        
-        <div id="registration">
-            <div class="input-group">
-                <label for="wallet">Ваш Solana кошелек:</label>
-                <input 
-                    type="text" 
-                    id="wallet" 
-                    placeholder="Введите ваш Solana адрес"
-                >
-            </div>
-            <button onclick="registerWallet()">Начать майнинг</button>
-        </div>
-        
-        <div id="mining" style="display: none;">
-            <div class="stats">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <div class="stats-box">
+                <h2>Mining Statistics</h2>
                 <div class="stat-item">
-                    <span class="stat-label">Ваш баланс:</span>
+                    <span class="stat-label">Total Hashes</span>
+                    <span class="stat-value" id="totalHashes">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Valid Hashes</span>
+                    <span class="stat-value" id="validHashes">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Your Balance</span>
                     <span class="stat-value" id="balance">0.00000</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-label">Найдено хешей:</span>
-                    <span class="stat-value" id="hashes">0</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Сложность:</span>
+                    <span class="stat-label">Current Difficulty</span>
                     <span class="stat-value" id="difficulty">2</span>
                 </div>
             </div>
             
-            <div class="mining-status" id="miningStatus">
-                Готов к майнингу...
+            <div class="control-box">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        id="wallet" 
+                        placeholder="Enter your Solana wallet address"
+                    >
+                    <button id="miningBtn" onclick="toggleMining()">Start Mining</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <h2>Blockchain Visualization</h2>
+            <div class="blockchain-container" id="blockchain">
+                <!-- Blocks will be added here dynamically -->
+            </div>
+            <div class="mining-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span class="status-text" id="statusText">Mining Idle</span>
             </div>
         </div>
     </div>
     
     <script>
         let walletAddress = '';
+        let isMining = false;
         let miningInterval = null;
+        let totalHashes = 0;
+        let validHashes = 0;
+        let balance = 0;
         
-        async function registerWallet() {
+        async function toggleMining() {
             const wallet = document.getElementById('wallet').value.trim();
-            if (!wallet) {
-                alert('Введите адрес кошелька');
-                return;
-            }
+            const btn = document.getElementById('miningBtn');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
             
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ wallet_address: wallet })
-                });
-                
-                if (response.ok) {
-                    walletAddress = wallet;
-                    document.getElementById('registration').style.display = 'none';
-                    document.getElementById('mining').style.display = 'block';
-                    startMining();
+            if (!isMining) {
+                // Start mining
+                if (!wallet) {
+                    alert('Please enter your Solana wallet address');
+                    return;
                 }
-            } catch (error) {
-                console.error('Ошибка регистрации:', error);
+                
+                walletAddress = wallet;
+                
+                try {
+                    const response = await fetch('/api/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ wallet_address: wallet })
+                    });
+                    
+                    if (response.ok) {
+                        isMining = true;
+                        btn.textContent = 'Stop Mining';
+                        btn.classList.add('stop');
+                        statusDot.classList.add('active');
+                        statusText.textContent = 'Mining Active';
+                        statusText.classList.add('active');
+                        startMining();
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    alert('Failed to register wallet');
+                }
+            } else {
+                // Stop mining
+                isMining = false;
+                btn.textContent = 'Start Mining';
+                btn.classList.remove('stop');
+                statusDot.classList.remove('active');
+                statusText.textContent = 'Mining Idle';
+                statusText.classList.remove('active');
+                
+                if (miningInterval) {
+                    clearInterval(miningInterval);
+                }
             }
         }
         
         async function startMining() {
-            while (true) {
+            while (isMining) {
                 try {
-                    // Получаем задачу
+                    // Get mining task
                     const taskResponse = await fetch('/api/mining');
                     const task = await taskResponse.json();
                     
                     document.getElementById('difficulty').textContent = task.difficulty;
-                    document.getElementById('miningStatus').textContent = 'Майнинг...';
-                    document.getElementById('miningStatus').classList.add('active');
                     
-                    // Решаем задачу
-                    const solution = solveChallenge(task.challenge, task.difficulty);
+                    // Solve challenge
+                    const solution = await solveChallenge(task.challenge, task.difficulty);
                     
-                    // Отправляем решение
+                    if (!isMining) break;
+                    
+                    // Submit solution
                     const solutionResponse = await fetch('/api/solution', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -216,15 +416,20 @@
                     const result = await solutionResponse.json();
                     
                     if (result.success) {
-                        // Обновляем статистику
+                        validHashes++;
+                        balance += result.tokens_earned;
+                        createBlock();
                         updateStats();
                     }
                     
-                    // Небольшая пауза перед следующей задачей
+                    totalHashes++;
+                    document.getElementById('totalHashes').textContent = totalHashes;
+                    
+                    // Small delay before next iteration
                     await new Promise(resolve => setTimeout(resolve, 100));
                     
                 } catch (error) {
-                    console.error('Ошибка майнинга:', error);
+                    console.error('Mining error:', error);
                     await new Promise(resolve => setTimeout(resolve, 5000));
                 }
             }
@@ -235,6 +440,8 @@
             let nonce = 0;
             
             while (true) {
+                if (!isMining) return null;
+                
                 const data = challenge + nonce;
                 const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(data));
                 const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -246,23 +453,38 @@
                 
                 nonce++;
                 
-                // Каждые 1000 итераций даем браузеру передышку
+                // Yield to browser every 1000 iterations
                 if (nonce % 1000 === 0) {
                     await new Promise(resolve => setTimeout(resolve, 0));
                 }
             }
         }
         
-        async function updateStats() {
-            try {
-                const response = await fetch('/api/stats');
-                const stats = await response.json();
-                
-                // Здесь можно добавить логику для отображения личной статистики
-                document.getElementById('hashes').textContent = stats.total_hashes;
-            } catch (error) {
-                console.error('Ошибка получения статистики:', error);
+        function createBlock() {
+            const blockchain = document.getElementById('blockchain');
+            const block = document.createElement('div');
+            block.className = 'block';
+            block.textContent = '✓';
+            
+            blockchain.appendChild(block);
+            
+            // Remove block after animation completes (2.5 seconds)
+            setTimeout(() => {
+                if (block.parentNode) {
+                    block.parentNode.removeChild(block);
+                }
+            }, 2500);
+            
+            // Limit number of visible blocks
+            const blocks = blockchain.querySelectorAll('.block');
+            if (blocks.length > 8) {
+                blocks[0].remove();
             }
+        }
+        
+        function updateStats() {
+            document.getElementById('validHashes').textContent = validHashes;
+            document.getElementById('balance').textContent = balance.toFixed(5);
         }
     </script>
 </body>
