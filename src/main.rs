@@ -7,7 +7,6 @@ use axum::{
 };
 use rusqlite::{params, Connection};
 use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, UNIX_EPOCH};
 use tower_http::services::ServeDir;
