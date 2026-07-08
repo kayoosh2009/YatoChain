@@ -63,7 +63,7 @@ async fn main() {
         db: Arc::new(Mutex::new(conn)),
         mining_state: Arc::new(Mutex::new(MiningState {
             current_challenge: mining::generate_challenge(),
-            difficulty: 2,
+            difficulty: 3,
             active_users: 0,
             last_activity: SystemTime::now()
                 .duration_since(UNIX_EPOCH)
@@ -165,15 +165,19 @@ async fn register_wallet(
     );
     
     match result {
-        Ok(_) => Ok(Json(serde_json::json!({
-            "success": true,
-            "message": "Кошелек зарегистрирован"
-        }))),
-        Err(e) => {
-            eprintln!("Ошибка регистрации: {}", e);
-            Err(StatusCode::INTERNAL_SERVER_ERROR)
+        Ok(_) => {
+            // Увеличиваем счетчик юзеров и пересчитываем сложность
+            let mut mining_state = state.mining_state.lock().unwrap();
+            mining_state.active_users += 1;
+            mining_state.difficulty = mining::calculate_difficulty(mining_state.active_users);
+            
+            println!("👤 Юзеров: {}, Сложность: {}", mining_state.active_users, mining_state.difficulty);
+
+            Ok(Json(serde_json::json!({
+                "success": true,
+                "message": "Кошелек зарегистрирован"
+            })))
         }
-    }
 }
 
 async fn get_mining_task(
