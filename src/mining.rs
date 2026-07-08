@@ -16,6 +16,7 @@ pub fn compute_hash(challenge: &str, nonce: u64) -> String {
     hex::encode(result)
 }
 
+#[allow(dead_code)]
 pub fn calculate_difficulty(active_users: usize) -> usize {
     match active_users {
         0..=5 => 2,

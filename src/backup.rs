@@ -9,15 +9,11 @@ pub async fn start_backup_monitor(state: AppState) {
     loop {
         tokio::time::sleep(backup_interval).await;
         
-        // Копируем нужные данные ДО await
-        let (last_activity, current_challenge, difficulty) = {
+        // Копируем только last_activity
+        let last_activity = {
             let mining_state = state.mining_state.lock().unwrap();
-            (
-                mining_state.last_activity,
-                mining_state.current_challenge.clone(),
-                mining_state.difficulty,
-            )
-        }; // Guard освобождается здесь
+            mining_state.last_activity
+        };
         
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
@@ -40,7 +36,7 @@ async fn create_backup_and_push() -> Result<(), Box<dyn std::error::Error>> {
     }
     
     let db_content = tokio::fs::read(db_path).await?;
-    let encoded = STANDARD.encode(&db_content); // Новый синтаксис
+    let encoded = STANDARD.encode(&db_content);
     
     let github_token = std::env::var("GITHUB_TOKEN")
         .expect("GITHUB_TOKEN не установлен в .env");
@@ -98,6 +94,8 @@ async fn create_backup_and_push() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+// Убираем download_from_github или помечаем как #[allow(dead_code)]
+#[allow(dead_code)]
 pub async fn download_from_github() -> Result<(), Box<dyn std::error::Error>> {
     let github_token = std::env::var("GITHUB_TOKEN")
         .expect("GITHUB_TOKEN не установлен в .env");
@@ -123,7 +121,7 @@ pub async fn download_from_github() -> Result<(), Box<dyn std::error::Error>> {
         let json: serde_json::Value = response.json().await?;
         
         if let Some(content) = json.get("content").and_then(|c| c.as_str()) {
-            let decoded = STANDARD.decode(content)?; // Новый синтаксис
+            let decoded = STANDARD.decode(content)?;
             tokio::fs::write("webtab_mining.db", decoded).await?;
             println!("✅ База данных скачана из GitHub");
         }
