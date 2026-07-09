@@ -14,17 +14,12 @@ use uuid::Uuid;
 use chrono::{DateTime, Utc};
 use dotenv::dotenv;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
-
-// Модели данных
 mod models;
 mod handlers;
 mod error;
 mod auth;
-
 use models::*;
 use error::AppError;
-
-// Состояние приложения
 #[derive(Clone)]
 pub struct AppState {
     pub db: PgPool,
@@ -33,10 +28,8 @@ pub struct AppState {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // Загрузка переменных окружения
     dotenv().ok();
 
-    // Инициализация логирования
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(
             std::env::var("RUST_LOG").unwrap_or_else(|_| "info".into()),
@@ -44,7 +37,6 @@ async fn main() -> anyhow::Result<()> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    // Подключение к базе данных
     let database_url = std::env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
     
@@ -56,7 +48,6 @@ async fn main() -> anyhow::Result<()> {
 
     tracing::info!("Connected to database");
 
-    // Запуск миграций
     sqlx::migrate!("./migrations")
         .run(&pool)
         .await
