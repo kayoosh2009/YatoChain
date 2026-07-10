@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YatoChain - Learn to Trade Risk-Free</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- Additional styles specific for homepage -->
+  <style>
+    /* Hero Banner */
+    .hero-banner {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      background-image: url('banner.png');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(28, 28, 28, 0.85) 0%,
+        rgba(28, 28, 28, 0.6) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+      padding: var(--spacing-xl);
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.2;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-title span {
+      color: var(--color-warning);
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: var(--spacing-xl);
+      padding: var(--spacing-xl) 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 1.0625rem;
+    }
+
+    /* Stages Cards */
+    .stage-card {
+      position: relative;
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .stage-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--color-warning);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stage-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background-color: var(--color-warning);
+      color: var(--bg-primary);
+      font-size: 1.5rem;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      margin-bottom: var(--spacing-md);
+      font-family: var(--font-mono);
+    }
+
+    .stage-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .stage-description {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Info Cards */
+    .info-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-warning);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: flex-start;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateX(5px);
+      background-color: var(--bg-tertiary);
+    }
+
+    .info-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(240, 185, 11, 0.15);
+      color: var(--color-warning);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .info-content h4 {
+      font-size: 1.125rem;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .info-content p {
+      color: var(--text-secondary);
+      margin: 0;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--bg-secondary);
+      border-top: 1px solid var(--border-color);
+      padding: var(--spacing-xl);
+      margin-top: var(--spacing-xl);
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      color: var(--text-muted);
+    }
+
+    .footer-logo {
+      color: var(--color-warning);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .footer a {
+      color: var(--text-secondary);
+      transition: color 0.2s ease;
+    }
+
+    .footer a:hover {
+      color: var(--color-warning);
+    }
+
+    /* Telegram Icon */
+    .telegram-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--text-secondary);
+      transition: fill 0.2s ease;
+    }
+
+    .nav-link:hover .telegram-icon,
+    .nav-link:focus .telegram-icon {
+      fill: var(--color-warning);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-banner {
+        height: 400px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+      }
+
+      .grid-cols-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <div class="flex items-center gap-2">
+        <img src="logo.png" alt="YatoChain" class="logo" style="height: 40px; width: auto;">
+        <span class="logo" style="margin-left: var(--spacing-sm);">YatoChain</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="https://t.me/yatochain" target="_blank" rel="noopener noreferrer" class="nav-link flex items-center gap-1" aria-label="Join our Telegram">
+          <svg class="telegram-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.569-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.643.135-.953l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+          </svg>
+          Telegram
+        </a>
+
+        <a href="app/lets-start.html" class="btn btn-primary">Start Your Journey</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container">
+    
+    <!-- Hero Banner -->
+    <section class="hero-banner fade-in">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          I know you want to become a <span>trader</span><br>
+          Why not start right now?
+        </h1>
+        <p class="hero-subtitle">
+          Learn, trade, and earn without risking real money. Build your trading skills on YatoChain.
+        </p>
+        <a href="app/lets-start.html" class="btn btn-primary btn-lg">Get Started Now</a>
+      </div>
+    </section>
+
+    <!-- Project Stages Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Project Stages</h2>
+        <p class="section-subtitle">Your path from beginner to trader</p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <div class="stage-card fade-in">
+          <div class="stage-number">1</div>
+          <h3 class="stage-title">Join & Learn</h3>
+          <p class="stage-description">
+            Join our platform and start learning while receiving daily internal bonuses. No risk, only reward.
+          </p>
+        </div>
+
+        <div class="stage-card fade-in">
+          <div class="stage-number">2</div>
+          <h3 class="stage-title">Trade & Earn XP</h3>
+          <p class="stage-description">
+            Trade virtual assets and gain experience points (XP). Learn from your mistakes without losing real money.
+          </p>
+        </div>
+
+        <div class="stage-card fade-in">
+          <div class="stage-number">3</div>
+          <h3 class="stage-title">Token Launch</h3>
+          <p class="stage-description">
+            Our coin will be released and you'll get your share. The more XP you earn, the bigger your share will be!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Important to Know Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Important to Know</h2>
+        <p class="section-subtitle">Everything you need to understand before starting</p>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="info-card fade-in">
+          <div class="info-icon">1</div>
+          <div class="info-content">
+            <h4>Internal Value Only</h4>
+            <p>
+              All assets have value only within the exchange itself. Payouts are made only in coins at the end of the project lifecycle.
+            </p>
+          </div>
+        </div>
+
+        <div class="info-card fade-in">
+          <div class="info-icon">2</div>
+          <div class="info-content">
+            <h4>Ads Support the Platform</h4>
+            <p>
+              Ad banners are crucial to us. The exchange's capital, maintenance, prizes, and bonuses are built on advertising revenue.
+            </p>
+          </div>
+        </div>
+
+        <div class="info-card fade-in">
+          <div class="info-icon">3</div>
+          <div class="info-content">
+            <h4>Join Our Telegram</h4>
+            <p>
+              I highly recommend joining our Telegram channel to stay updated on important project news, announcements, and updates.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">YatoChain</div>
+      <p>
+        Created by <strong>KayooshStudio</strong> in 2026<br>
+        <a href="mailto:kayoosh2009@gmail.com">kayoosh2009@gmail.com</a>
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
