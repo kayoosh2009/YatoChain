@@ -675,40 +675,46 @@ a:hover {
 }
 
 /* ============================================
-   Footer Layout Update
+   Footer Layout (Text Left / Ad Right)
    ============================================ */
+
+.footer {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: var(--spacing-xl) 0;
+  margin-top: var(--spacing-xl);
+}
 
 .footer-content {
   display: flex;
-  justify-content: space-between; /* Распределяет элементы по краям */
-  align-items: center;            /* Выравнивает по вертикали */
+  justify-content: space-between; /* Текст слева, реклама справа */
+  align-items: flex-start;        /* Выравнивание по верхнему краю */
   max-width: 1400px;
   margin: 0 auto;
-  gap: var(--spacing-xl);         /* Отступ между рекламой и текстом */
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-xl);
 }
 
-/* Блок с рекламой */
-.footer-ad-container {
-  flex-shrink: 0; /* Запрещает сжимать рекламный блок */
-}
-
-/* Блок с текстом */
-.footer-text-block {
-  text-align: right; /* Текст прижат к правому краю своего блока */
-  flex-grow: 1;      /* Занимает всё оставшееся пространство */
+/* Левый блок с текстом */
+.footer-left-block {
+  text-align: left;       /* Прижимаем текст к левому краю */
+  flex-grow: 1;           /* Занимает всё доступное пространство */
+  max-width: 70%;         /* Ограничиваем ширину, чтобы не наезжал на рекламу */
 }
 
 .footer-logo {
   color: var(--color-warning);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
+  letter-spacing: -0.5px;
 }
 
 .footer-info {
   color: var(--text-muted);
-  margin: 0;
+  margin: 0 0 var(--spacing-md) 0;
   line-height: 1.6;
+  font-size: 0.9375rem;
 }
 
 .footer-info a {
@@ -720,21 +726,50 @@ a:hover {
   color: var(--color-warning);
 }
 
+/* Стили для дополнительного текста */
+.footer-extra-text {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-extra-text p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.5;
+}
+
+/* Правый блок с рекламой */
+.footer-ad-container {
+  flex-shrink: 0; /* Запрещаем сжимать рекламный блок */
+  width: 300px;
+}
+
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
   .footer-content {
-    flex-direction: column; /* На телефонах ставим друг под друга */
+    flex-direction: column-reverse; /* Реклама сверху, текст снизу на мобильных */
+    align-items: center;
     text-align: center;
     gap: var(--spacing-lg);
   }
 
-  .footer-text-block {
-    text-align: center; /* Центрируем текст на мобильных */
+  .footer-left-block {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .footer-ad-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
   
-  /* Опционально: можно уменьшить масштаб рекламы на очень маленьких экранах */
+  /* Масштабируем рекламу на узких экранах */
   .footer-ad-container iframe {
-    transform: scale(0.9);
+    max-width: 100%;
+    transform: scale(0.95);
     transform-origin: top center;
   }
 }
