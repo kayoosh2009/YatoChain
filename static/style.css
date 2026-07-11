@@ -673,3 +673,68 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
 }
+
+/* ============================================
+   Footer Layout Update
+   ============================================ */
+
+.footer-content {
+  display: flex;
+  justify-content: space-between; /* Распределяет элементы по краям */
+  align-items: center;            /* Выравнивает по вертикали */
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: var(--spacing-xl);         /* Отступ между рекламой и текстом */
+}
+
+/* Блок с рекламой */
+.footer-ad-container {
+  flex-shrink: 0; /* Запрещает сжимать рекламный блок */
+}
+
+/* Блок с текстом */
+.footer-text-block {
+  text-align: right; /* Текст прижат к правому краю своего блока */
+  flex-grow: 1;      /* Занимает всё оставшееся пространство */
+}
+
+.footer-logo {
+  color: var(--color-warning);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-info {
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.footer-info a {
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.footer-info a:hover {
+  color: var(--color-warning);
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column; /* На телефонах ставим друг под друга */
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+
+  .footer-text-block {
+    text-align: center; /* Центрируем текст на мобильных */
+  }
+  
+  /* Опционально: можно уменьшить масштаб рекламы на очень маленьких экранах */
+  .footer-ad-container iframe {
+    transform: scale(0.9);
+    transform-origin: top center;
+  }
+}
