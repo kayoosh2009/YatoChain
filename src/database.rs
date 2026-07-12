@@ -11,10 +11,11 @@ pub async fn init() -> PgPool {
         .await
         .expect("Failed to connect to database");
     
-    sqlx::migrate!("./migrations")
-        .run(&pool)
-        .await
-        .expect("Failed to run migrations");
+    // Миграции отключены. Создавай таблицы через Supabase Dashboard -> SQL Editor
+    // sqlx::migrate!("./migrations")
+    //     .run(&pool)
+    //     .await
+    //     .expect("Failed to run migrations");
     
     tracing::info!("Database connected");
     pool

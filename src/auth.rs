@@ -26,13 +26,24 @@ pub struct AuthResponse {
 
 // Вход через Google (через Supabase Auth)
 pub async fn google_login(
-    State(state): State<AppState>,
-    Json(req): Json<GoogleLoginRequest>,
+    State(_state): State<AppState>,
+    Json(_req): Json<GoogleLoginRequest>,
 ) -> Json<AuthResponse> {
     // Здесь ты получаешь user_id от Supabase
     // и создаешь/обновляешь пользователя в своей БД
     Json(AuthResponse {
         user_id: "google-user-id".to_string(),
         email: "user@gmail.com".to_string(),
+    })
+}
+
+// Вход через email/password (через Supabase Auth)
+pub async fn email_login(
+    State(_state): State<AppState>,
+    Json(req): Json<EmailLoginRequest>,
+) -> Json<AuthResponse> {
+    Json(AuthResponse {
+        user_id: "email-user-id".to_string(),
+        email: req.email,
     })
 }
