@@ -36,14 +36,3 @@ pub async fn google_login(
         email: "user@gmail.com".to_string(),
     })
 }
-
-// Вход через email/password (через Supabase Auth)
-pub async fn email_login(
-    State(state): State<AppState>,
-    Json(req): Json<EmailLoginRequest>,
-) -> Json<AuthResponse> {
-    Json(AuthResponse {
-        user_id: "email-user-id".to_string(),
-        email: req.email,
-    })
-}
