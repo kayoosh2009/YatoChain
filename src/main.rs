@@ -9,19 +9,20 @@ mod auth;
 async fn main() {
     dotenv().ok();
     tracing_subscriber::fmt::init();
-    
-    let pool = database::init().await;
-    let state = auth::AppState { db: pool };
-    
+
+    // Инициализируем клиент Supabase вместо PgPool
+    let supabase_client = database::init().await;
+    let state = auth::AppState { supabase: supabase_client };
+
     let app = Router::new()
         .route("/", get(|| async { "Hello" }))
         .route("/auth/google", post(auth::google_login))
         .route("/auth/email", post(auth::email_login))
         .with_state(state);
-    
+
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     tracing::info!("Server on {}", addr);
-    
+
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
