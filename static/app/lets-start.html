@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <link rel="stylesheet" href="../style.css">
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <style>
         /* Стили для центрирования карточки на весь экран без навбара/футера */
         body {
@@ -17,30 +18,36 @@
             min-height: 100vh;
             margin: 0;
         }
+
         .start-card {
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
+
         .start-card .card-body {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1.5rem;
         }
+
         .btn-google {
             width: 100%;
             justify-content: center;
         }
+
         .btn-back {
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.2s ease;
         }
+
         .btn-back:hover {
             color: var(--text-primary);
         }
+
         #status-message {
             color: var(--text-muted);
             font-size: 0.875rem;
@@ -49,6 +56,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Единственная рамка (карточка) -->
@@ -58,110 +66,60 @@
         </div>
         <div class="card-body">
             <!-- Кнопка входа через Google -->
-            <button id="google-login-btn" class="btn btn-primary btn-lg btn-google">
-                <svg width="20" height="20" viewBox="0 0 48 48">
-                    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-                    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-                    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-                    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+            <button id="google-btn" class="btn-google">
+                <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
                 Войти через Google
             </button>
 
             <!-- Ссылка назад -->
             <a href="../index.html" class="btn-back">← Перейти назад</a>
-            
+
             <!-- Статус -->
             <p id="status-message"></p>
         </div>
     </div>
 
-    <script>
-        // ============================================
-        // КОНФИГУРАЦИЯ
-        // ============================================
-        // 1. Данные из Supabase Dashboard (Settings -> API)
-        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-        
-        // 2. URL твоего Rust бэкенда (Axum)
-        // Если фронт и бэк на разных портах, укажи полный адрес, например: 'http://localhost:3000'
-        const BACKEND_URL = 'http://localhost:3000'; 
+    <script type="module">
+        import { createClient } from 'https://esm.run/@supabase/supabase-js';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Вставьте ваши URL и KEY (или передайте их с бэкенда)
+        const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
 
-        // Элементы DOM
-        const loginBtn = document.getElementById('google-login-btn');
-        const statusMsg = document.getElementById('status-message');
-
-        // ============================================
-        // ПРОВЕРКА СЕССИИ ПРИ ЗАГРУЗКЕ
-        // ============================================
-        async function checkSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-
-            // Если пользователь уже вошел (Supabase хранит сессию в localStorage)
-            if (session && session.user) {
-                statusMsg.textContent = 'Проверяем данные на сервере...';
-                
-                try {
-                    // Отправляем access_token на твой Rust бэкенд
-                    const response = await fetch(`${BACKEND_URL}/auth/google`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            access_token: session.access_token // Токен, который ждет твой auth.rs
-                        })
-                    });
-
-                    if (!response.ok) throw new Error('Ошибка авторизации на бэкенде');
-
-                    const data = await response.json(); // Ожидаем { user_id: String, email: String }
-                    
-                    // Сохраняем логин (email) в "хеш" (localStorage)
-                    localStorage.setItem('user_login', data.email);
-                    localStorage.setItem('user_id', data.user_id);
-                    
-                    statusMsg.textContent = 'Успешно! Перенаправляем...';
-                    
-                    // Редирект на main (замени на main.py, если это роут бэкенда)
-                    setTimeout(() => {
-                        window.location.href = '../main.html'; 
-                    }, 500);
-                    
-                } catch (error) {
-                    console.error('Backend Error:', error);
-                    statusMsg.textContent = 'Ошибка связи с сервером.';
-                }
-            }
+        // Проверка сессии при загрузке страницы
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session || localStorage.getItem('auth_token')) {
+            if (session) localStorage.setItem('auth_token', session.access_token);
+            window.location.href = 'main.html';
         }
 
-        // ============================================
-        // КЛИК ПО КНОПКЕ GOOGLE
-        // ============================================
-        loginBtn.addEventListener('click', async () => {
-            loginBtn.disabled = true;
-            statusMsg.textContent = 'Открываем Google...';
-
-            const { data, error } = await supabase.auth.signInWithOAuth({
+        // Обработка клика по кнопке
+        document.getElementById('google-btn').addEventListener('click', async () => {
+            await supabase.auth.signInWithOAuth({
                 provider: 'google',
-                options: {
-                    // После входа Google вернет нас на эту же страницу
-                    redirectTo: window.location.origin + window.location.pathname 
-                }
+                options: { redirectTo: window.location.href }
             });
 
-            if (error) {
-                console.error('OAuth Error:', error);
-                statusMsg.textContent = 'Ошибка: ' + error.message;
-                loginBtn.disabled = false;
+            // После редиректа от Google забираем токен и отправляем на ваш бэкенд
+            const { data: { session: newSession } } = await supabase.auth.getSession();
+            if (newSession) {
+                const res = await fetch('/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ access_token: newSession.access_token })
+                });
+
+                if (res.ok) {
+                    localStorage.setItem('auth_token', newSession.access_token);
+                    window.location.href = 'main.html';
+                }
             }
         });
-
-        // Запускаем проверку при загрузке
-        checkSession();
     </script>
 </body>
+
 </html>
