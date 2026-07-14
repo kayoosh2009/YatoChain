@@ -773,3 +773,36 @@ a:hover {
     transform-origin: top center;
   }
 }
+
+.btn-google {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 24px;
+    background-color: #ffffff;
+    color: #3c4043;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 500;
+    border: 1px solid #dadce0;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-google:hover {
+    background-color: #f8f9fa;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn-google:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.google-icon {
+    flex-shrink: 0;
+}
