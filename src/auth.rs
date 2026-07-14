@@ -1,4 +1,4 @@
-use axum::{extract::State, Json, http::StatusCode};
+use axum::{extract::State, response::Redirect, Json, http::StatusCode};
 use serde::{Deserialize, Serialize};
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use crate::database::SupabaseClient;
