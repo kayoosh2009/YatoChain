@@ -99,3 +99,18 @@ pub async fn email_login(
         Err(StatusCode::UNAUTHORIZED)
     }
 }
+
+pub async fn google_start() -> Result<Redirect, StatusCode> {
+    let supabase_url = std::env::var("SUPABASE_URL")
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    
+    // Важно: этот URL должен быть добавлен в Supabase Dashboard -> Authentication -> URL Configuration -> Redirect URLs
+    let redirect_to = "http://127.0.0.1:3000/lets-start.html";
+    
+    let auth_url = format!(
+        "{}/auth/v1/authorize?provider=google&redirect_to={}",
+        supabase_url, redirect_to
+    );
+    
+    Ok(Redirect::to(&auth_url))
+}
