@@ -66,7 +66,7 @@
         </div>
         <div class="card-body">
             <!-- Кнопка входа через Google -->
-            <button id="google-btn" class="btn-google">
+            <a href="/auth/google/start" class="btn-google">
                 <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                     <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -74,7 +74,7 @@
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
                 Войти через Google
-            </button>
+            </a>
 
             <!-- Ссылка назад -->
             <a href="../index.html" class="btn-back">← Перейти назад</a>
@@ -84,41 +84,38 @@
         </div>
     </div>
 
-    <script type="module">
-        import { createClient } from 'https://esm.run/@supabase/supabase-js';
-
-        // Вставьте ваши URL и KEY (или передайте их с бэкенда)
-        const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
-
-        // Проверка сессии при загрузке страницы
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session || localStorage.getItem('auth_token')) {
-            if (session) localStorage.setItem('auth_token', session.access_token);
-            window.location.href = 'main.html';
-        }
-
-        // Обработка клика по кнопке
-        document.getElementById('google-btn').addEventListener('click', async () => {
-            await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: { redirectTo: window.location.href }
-            });
-
-            // После редиректа от Google забираем токен и отправляем на ваш бэкенд
-            const { data: { session: newSession } } = await supabase.auth.getSession();
-            if (newSession) {
-                const res = await fetch('/auth/google', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ access_token: newSession.access_token })
-                });
-
+    <script>
+        // Этот скрипт срабатывает ТОЛЬКО когда Google возвращает пользователя обратно на эту страницу
+        if (window.location.hash.includes('access_token')) {
+            // Извлекаем токен из URL (вида #access_token=eyJ...&expires_in=3600)
+            const token = window.location.hash.split('access_token=')[1].split('&')[0];
+            
+            // Отправляем токен на наш Rust-бэкенд для проверки (твой существующий эндпоинт)
+            fetch('/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ access_token: token })
+            })
+            .then(async (res) => {
                 if (res.ok) {
-                    localStorage.setItem('auth_token', newSession.access_token);
-                    window.location.href = 'main.html';
+                    // Сохраняем токен и перенаправляем на главную
+                    localStorage.setItem('auth_token', token);
+                    window.location.href = '/main.html';
+                } else {
+                    console.error('Ошибка авторизации на сервере');
+                    window.location.href = '/'; 
                 }
-            }
-        });
+            })
+            .catch(err => console.error('Ошибка сети:', err));
+            
+            // Очищаем URL от токена для красоты и безопасности
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+        // Проверка при загрузке: если токен уже есть в localStorage, сразу кидаем на main.html
+        if (localStorage.getItem('auth_token')) {
+            window.location.href = '/main.html';
+        }
     </script>
 </body>
 
