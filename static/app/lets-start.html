@@ -1,122 +1,97 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YatoChain - Start</title>
-    <link rel="stylesheet" href="../style.css">
-    <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
-        /* Стили для центрирования карточки на весь экран без навбара/футера */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .start-card {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .start-card .card-body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .btn-google {
-            width: 100%;
-            justify-content: center;
-        }
-
-        .btn-back {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s ease;
-        }
-
-        .btn-back:hover {
-            color: var(--text-primary);
-        }
-
-        #status-message {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            min-height: 20px;
-            margin: 0;
-        }
+        body { margin: 0; font-family: sans-serif; display: flex; height: 100vh; background: #f9f9f9; }
+        .left { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .right { flex: 1; display: flex; justify-content: center; align-items: center; background: #eaeaea; }
+        .right img { max-width: 80%; max-height: 80%; object-fit: contain; border-radius: 12px; }
+        .container { width: 100%; max-width: 320px; }
+        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
+        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: #666; }
+        .tab.active { color: #000; border-bottom: 2px solid #000; margin-bottom: -2px; font-weight: bold; }
+        .form { display: none; flex-direction: column; gap: 12px; }
+        .form.active { display: flex; }
+        input { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        button { padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        button:hover { background: #333; }
+        .msg { margin-top: 10px; text-align: center; font-size: 14px; }
+        .back { margin-top: 20px; text-align: center; }
+        .back a { color: #666; text-decoration: none; font-size: 14px; }
     </style>
 </head>
-
 <body>
+    <div class="left">
+        <div class="container">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('login', this)">Вход</div>
+                <div class="tab" onclick="switchTab('register', this)">Регистрация</div>
+            </div>
+            
+            <form id="login" class="form active" onsubmit="submitForm(event, '/auth/email')">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+                <div id="login-msg" class="msg"></div>
+            </form>
 
-    <!-- Единственная рамка (карточка) -->
-    <div class="card start-card fade-in">
-        <div class="card-header" style="justify-content: center; border-bottom: none; margin-bottom: 0.5rem;">
-            <h2 class="card-title">Want to start?</h2>
+            <form id="register" class="form" onsubmit="submitForm(event, '/auth/register')">
+                <input type="text" name="nickname" placeholder="Никнейм" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Пароль" required>
+                <button type="submit">Создать аккаунт</button>
+                <div id="register-msg" class="msg"></div>
+            </form>
+
+            <div class="back"><a href="../index.html">← go back</a></div>
         </div>
-        <div class="card-body">
-            <!-- Кнопка входа через Google -->
-            <a href="/auth/google/start" class="btn-google">
-                <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                </svg>
-                Sing in with Google
-            </a>
-
-            <!-- Ссылка назад -->
-            <a href="../index.html" class="btn-back">← go back</a>
-
-            <!-- Статус -->
-            <p id="status-message"></p>
-        </div>
+    </div>
+    <div class="right">
+        <img src="img/letsstart.png" alt="Start">
     </div>
 
     <script>
-        // Этот скрипт срабатывает ТОЛЬКО когда Google возвращает пользователя обратно на эту страницу
-        if (window.location.hash.includes('access_token')) {
-            // Извлекаем токен из URL (вида #access_token=eyJ...&expires_in=3600)
-            const token = window.location.hash.split('access_token=')[1].split('&')[0];
-            
-            // Отправляем токен на наш Rust-бэкенд для проверки (твой существующий эндпоинт)
-            fetch('/auth/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ access_token: token })
-            })
-            .then(async (res) => {
-                if (res.ok) {
-                    // Сохраняем токен и перенаправляем на главную
-                    localStorage.setItem('auth_token', token);
-                    window.location.href = '/main.html';
-                } else {
-                    console.error('Ошибка авторизации на сервере');
-                    window.location.href = '/'; 
-                }
-            })
-            .catch(err => console.error('Ошибка сети:', err));
-            
-            // Очищаем URL от токена для красоты и безопасности
-            window.history.replaceState({}, document.title, window.location.pathname);
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            el.classList.add('active');
         }
-        
-        // Проверка при загрузке: если токен уже есть в localStorage, сразу кидаем на main.html
-        if (localStorage.getItem('auth_token')) {
-            window.location.href = '/main.html';
+
+        async function submitForm(e, url) {
+            e.preventDefault();
+            const form = e.target;
+            const msgEl = document.getElementById(form.id + '-msg');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            msgEl.textContent = 'Загрузка...';
+            msgEl.style.color = 'blue';
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    msgEl.textContent = 'Успешно!';
+                    msgEl.style.color = 'green';
+                    if (form.id === 'login') {
+                        // window.location.href = '/dashboard'; // Раскомментируй для редиректа
+                    }
+                } else {
+                    msgEl.textContent = 'Ошибка. Проверьте данные.';
+                    msgEl.style.color = 'red';
+                }
+            } catch (err) {
+                msgEl.textContent = 'Ошибка сети.';
+                msgEl.style.color = 'red';
+            }
         }
     </script>
 </body>
-
 </html>
