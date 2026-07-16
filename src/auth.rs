@@ -73,17 +73,35 @@ pub async fn email_login(
     }
 }
 
-pub async fn google_start() -> Result<Redirect, StatusCode> {
-    let supabase_url = std::env::var("SUPABASE_URL")
+pub async fn email_register(
+    State(state): State<AppState>,
+    Json(req): Json<EmailRegisterRequest>,
+) -> Result<Json<AuthResponse>, StatusCode> {
+    let url = format!("{}/auth/v1/signup", state.supabase.url);
+    let mut headers = HeaderMap::new();
+    headers.insert("apikey", HeaderValue::from_str(&state.supabase.anon_key).unwrap());
+    headers.insert("Content-Type", HeaderValue::from_static("application/json"));
+    
+    let body = serde_json::json!({
+        "email": req.email,
+        "password": req.password,
+        "data": { "nickname": req.nickname }
+    });
+    
+    let res = state.supabase.client.post(&url)
+        .headers(headers)
+        .json(&body)
+        .send()
+        .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-    
-    // Важно: этот URL должен быть добавлен в Supabase Dashboard -> Authentication -> URL Configuration -> Redirect URLs
-    let redirect_to = "http://127.0.0.1:3000/lets-start.html";
-    
-    let auth_url = format!(
-        "{}/auth/v1/authorize?provider=google&redirect_to={}",
-        supabase_url, redirect_to
-    );
-    
-    Ok(Redirect::to(&auth_url))
+        
+    if res.status().is_success() {
+        let auth_res: SupabaseAuthResponse = res.json().await.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+        Ok(Json(AuthResponse {
+            user_id: auth_res.user.id,
+            email: auth_res.user.email,
+        }))
+    } else {
+        Err(StatusCode::BAD_REQUEST)
+    }
 }
