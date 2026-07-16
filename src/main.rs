@@ -15,8 +15,7 @@ async fn main() {
     let state = auth::AppState { supabase: supabase_client };
 
     let app = Router::new()
-        .route("/auth/google", post(auth::google_login))
-        .route("/auth/google/start", get(auth::google_start))
+        .route("/auth/register", post(auth::email_register))
         .route("/auth/email", post(auth::email_login))
         .fallback_service(ServeDir::new("static"))
         .with_state(state);
