@@ -9,14 +9,15 @@ pub struct AppState {
 }
 
 #[derive(Deserialize)]
-pub struct GoogleLoginRequest {
-    pub access_token: String, // JWT токен от Supabase после Google OAuth
-}
-
-#[derive(Deserialize)]
 pub struct EmailLoginRequest {
     pub email: String,
     pub password: String,
+}
+#[derive(Deserialize)]
+pub struct EmailRegisterRequest {
+    pub email: String,
+    pub password: String,
+    pub nickname: String,
 }
 
 #[derive(Serialize)]
