@@ -39,34 +39,6 @@ struct SupabaseAuthResponse {
     user: SupabaseUserResponse,
 }
 
-// Вход через Google (проверка токена)
-pub async fn google_login(
-    State(state): State<AppState>,
-    Json(req): Json<GoogleLoginRequest>,
-) -> Result<Json<AuthResponse>, StatusCode> {
-    let url = format!("{}/auth/v1/user", state.supabase.url);
-    
-    let mut headers = HeaderMap::new();
-    headers.insert("apikey", HeaderValue::from_str(&state.supabase.anon_key).unwrap());
-    headers.insert(AUTHORIZATION, HeaderValue::from_str(&format!("Bearer {}", req.access_token)).unwrap());
-
-    let res = state.supabase.client.get(&url)
-        .headers(headers)
-        .send()
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-
-    if res.status().is_success() {
-        let user: SupabaseUserResponse = res.json().await.map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-        Ok(Json(AuthResponse {
-            user_id: user.id,
-            email: user.email,
-        }))
-    } else {
-        Err(StatusCode::UNAUTHORIZED)
-    }
-}
-
 // Вход через email/password
 pub async fn email_login(
     State(state): State<AppState>,
