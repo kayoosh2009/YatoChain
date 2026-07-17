@@ -3,61 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <title>YatoChain - Start</title>
+    <link rel="stylesheet" href="../style.css"> <!-- Если css в папке выше, замени на ../style.css -->
     <style>
-        body { margin: 0; font-family: sans-serif; display: flex; height: 100vh; background: #f9f9f9; }
-        .left { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        .right { flex: 1; display: flex; justify-content: center; align-items: center; background: #eaeaea; }
-        .right img { max-width: 80%; max-height: 80%; object-fit: contain; border-radius: 12px; }
-        .container { width: 100%; max-width: 320px; }
-        .tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #ddd; }
-        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; color: #666; }
-        .tab.active { color: #000; border-bottom: 2px solid #000; margin-bottom: -2px; font-weight: bold; }
-        .form { display: none; flex-direction: column; gap: 12px; }
-        .form.active { display: flex; }
-        input { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-        button { padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
-        button:hover { background: #333; }
-        .msg { margin-top: 10px; text-align: center; font-size: 14px; }
-        .back { margin-top: 20px; text-align: center; }
-        .back a { color: #666; text-decoration: none; font-size: 14px; }
+        /* Кастомные стили только для сплит-лейаута, которых нет в основном CSS */
+        .auth-layout { display: flex; height: 100vh; }
+        .auth-left { flex: 1; display: flex; justify-content: center; align-items: center; padding: var(--spacing-lg); }
+        .auth-right { flex: 1; display: flex; justify-content: center; align-items: center; background-color: var(--bg-secondary); border-left: 1px solid var(--border-color); }
+        .auth-right img { max-width: 80%; max-height: 80%; object-fit: contain; border-radius: var(--radius-lg); }
+        .auth-card { width: 100%; max-width: 400px; }
+        .auth-tabs { display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); }
+        .auth-tabs .btn { flex: 1; }
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+        .auth-msg { margin-top: var(--spacing-md); text-align: center; font-size: 0.875rem; }
     </style>
 </head>
 <body>
-    <div class="left">
-        <div class="container">
-            <div class="tabs">
-                <div class="tab active" onclick="switchTab('login', this)">Вход</div>
-                <div class="tab" onclick="switchTab('register', this)">Регистрация</div>
+    <div class="auth-layout">
+        <div class="auth-left">
+            <div class="auth-card card">
+                <div class="card-header" style="border-bottom: none; padding-bottom: 0;">
+                    <h2 class="card-title" style="margin-bottom: 0;">Добро пожаловать</h2>
+                </div>
+                <div class="card-body">
+                    <div class="auth-tabs">
+                        <button class="btn btn-primary" onclick="switchTab('login', this)">Вход</button>
+                        <button class="btn btn-outline" onclick="switchTab('register', this)">Регистрация</button>
+                    </div>
+
+                    <form id="login" class="auth-form active" onsubmit="submitForm(event, '/auth/email')">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Пароль</label>
+                            <input type="password" name="password" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Войти</button>
+                        <div id="login-msg" class="auth-msg"></div>
+                    </form>
+
+                    <form id="register" class="auth-form" onsubmit="submitForm(event, '/auth/register')">
+                        <div class="form-group">
+                            <label class="form-label">Никнейм</label>
+                            <input type="text" name="nickname" class="form-input" placeholder="Ваш никнейм" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Пароль</label>
+                            <input type="password" name="password" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Создать аккаунт</button>
+                        <div id="register-msg" class="auth-msg"></div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <a href="../index.html" style="color: var(--text-muted);">← go back</a>
+                    </div>
+                </div>
             </div>
-            
-            <form id="login" class="form active" onsubmit="submitForm(event, '/auth/email')">
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Пароль" required>
-                <button type="submit">Войти</button>
-                <div id="login-msg" class="msg"></div>
-            </form>
-
-            <form id="register" class="form" onsubmit="submitForm(event, '/auth/register')">
-                <input type="text" name="nickname" placeholder="Никнейм" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" placeholder="Пароль" required>
-                <button type="submit">Создать аккаунт</button>
-                <div id="register-msg" class="msg"></div>
-            </form>
-
-            <div class="back"><a href="../index.html">← go back</a></div>
         </div>
-    </div>
-    <div class="right">
-        <img src="img/letsstart.png" alt="Start">
+        <div class="auth-right">
+            <img src="img/letsstart.png" alt="Start">
+        </div>
     </div>
 
     <script>
         function switchTab(tabId, el) {
-            document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.querySelectorAll('.auth-tabs .btn').forEach(b => {
+                b.classList.remove('btn-primary');
+                b.classList.add('btn-outline');
+            });
             document.getElementById(tabId).classList.add('active');
-            el.classList.add('active');
+            el.classList.remove('btn-outline');
+            el.classList.add('btn-primary');
         }
 
         async function submitForm(e, url) {
@@ -68,7 +92,7 @@
             const data = Object.fromEntries(formData.entries());
 
             msgEl.textContent = 'Загрузка...';
-            msgEl.style.color = 'blue';
+            msgEl.style.color = 'var(--color-info)';
 
             try {
                 const res = await fetch(url, {
@@ -79,17 +103,14 @@
 
                 if (res.ok) {
                     msgEl.textContent = 'Успешно!';
-                    msgEl.style.color = 'green';
-                    if (form.id === 'login') {
-                        // window.location.href = '/dashboard'; // Раскомментируй для редиректа
-                    }
+                    msgEl.style.color = 'var(--color-success)';
                 } else {
                     msgEl.textContent = 'Ошибка. Проверьте данные.';
-                    msgEl.style.color = 'red';
+                    msgEl.style.color = 'var(--color-danger)';
                 }
             } catch (err) {
                 msgEl.textContent = 'Ошибка сети.';
-                msgEl.style.color = 'red';
+                msgEl.style.color = 'var(--color-danger)';
             }
         }
     </script>
