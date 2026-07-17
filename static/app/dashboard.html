@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YatoChain - Dashboard</title>
+    <!-- Укажи правильный путь к style.css, если он лежит в другой папке (например, ../style.css) -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стили специально для бургер-меню, которых нет в основном style.css */
+        .burger-menu {
+            display: none; /* Скрыто на десктопе */
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            z-index: 1001;
+        }
+        .burger-menu span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .burger-menu {
+                display: flex; /* Показываем 3 линии на мобильных */
+            }
+            .nav-menu {
+                display: none; /* Скрываем горизонтальное меню по умолчанию */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--bg-secondary);
+                flex-direction: column;
+                padding: var(--spacing-md);
+                border-bottom: 1px solid var(--border-color);
+                box-shadow: var(--shadow-md);
+                gap: var(--spacing-md);
+            }
+            .nav-menu.active {
+                display: flex; /* Показываем меню при добавлении класса active */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навбар -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="#" class="logo">YatoChain</a>
+            
+            <!-- Основное меню -->
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#" class="nav-link active">Dashboard</a></li>
+                <li><a href="#" class="nav-link">Торговля</a></li>
+                <li><a href="#" class="nav-link">Портфель</a></li>
+                <li><a href="#" class="nav-link">Настройки</a></li>
+            </ul>
+
+            <!-- Кнопка бургер-меню (3 линии) -->
+            <button class="burger-menu" id="burgerBtn" aria-label="Открыть меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Основной контент страницы -->
+    <main class="container" style="padding-top: var(--spacing-xl);">
+        <div class="card fade-in">
+            <div class="card-header">
+                <h2 class="card-title">Панель управления</h2>
+                <span class="badge badge-success">Активен</span>
+            </div>
+            <div class="card-body">
+                <p>Добро пожаловать в YatoChain! Здесь будет располагаться ваш торговый интерфейс, графики и статистика.</p>
+                <div class="mt-3">
+                    <button class="btn btn-primary">Начать торговлю</button>
+                    <button class="btn btn-outline">Пополнить баланс</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Скрипт для работы бургер-меню -->
+    <script>
+        const burgerBtn = document.getElementById('burgerBtn');
+        const navMenu = document.getElementById('navMenu');
+
+        burgerBtn.addEventListener('click', () => {
+            // Переключаем класс active у меню
+            navMenu.classList.toggle('active');
+            
+            // Простая анимация превращения 3 линий в крестик (опционально)
+            const spans = burgerBtn.querySelectorAll('span');
+            if (navMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(5px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+
+        // Закрытие меню при клике вне его области
+        document.addEventListener('click', (e) => {
+            if (!burgerBtn.contains(e.target) && !navMenu.contains(e.target)) {
+                navMenu.classList.remove('active');
+                const spans = burgerBtn.querySelectorAll('span');
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
