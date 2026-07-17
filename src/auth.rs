@@ -1,6 +1,6 @@
-use axum::{extract::State, response::Redirect, Json, http::StatusCode};
+use axum::{extract::State, Json, http::StatusCode};
 use serde::{Deserialize, Serialize};
-use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
+use reqwest::header::{HeaderMap, HeaderValue};
 use crate::database::SupabaseClient;
 
 #[derive(Clone)]
@@ -69,8 +69,8 @@ pub async fn email_login(
         Ok(Json(AuthResponse {
             user_id: auth_res.user.id,
             email: auth_res.user.email,
-            access_token: Some(auth_res.access_token), // <-- ДОБАВИТЬ
-            message: None,                             // <-- ДОБАВИТЬ
+            access_token: auth_res.access_token, // Просто присваиваем, так как это уже Option<String>
+            message: None,
         }))
     } else {
         Err(StatusCode::UNAUTHORIZED)

@@ -1,4 +1,4 @@
-use axum::{routing::{get, post}, Router};
+use axum::{routing::post, Router};
 use std::net::SocketAddr;
 use dotenv::dotenv;
 use tower_http::services::ServeDir; 
