@@ -69,8 +69,8 @@ pub async fn email_login(
         Ok(Json(AuthResponse {
             user_id: auth_res.user.id,
             email: auth_res.user.email,
-            access_token: None, // При регистрации токена нет
-            message: Some("Письмо для подтверждения отправлено на вашу почту.".to_string()),
+            access_token: Some(auth_res.access_token), // <-- ДОБАВИТЬ
+            message: None,                             // <-- ДОБАВИТЬ
         }))
     } else {
         Err(StatusCode::UNAUTHORIZED)
@@ -104,6 +104,8 @@ pub async fn email_register(
         Ok(Json(AuthResponse {
             user_id: auth_res.user.id,
             email: auth_res.user.email,
+            access_token: None,                        // <-- ДОБАВИТЬ
+            message: Some("Письмо для подтверждения отправлено на вашу почту.".to_string()), // <-- ДОБАВИТЬ
         }))
     } else {
         Err(StatusCode::BAD_REQUEST)
