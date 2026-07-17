@@ -24,6 +24,8 @@ pub struct EmailRegisterRequest {
 pub struct AuthResponse {
     pub user_id: String,
     pub email: String,
+    pub access_token: Option<String>, // Делаем опциональным
+    pub message: Option<String>, 
 }
 
 // Вспомогательные структуры для парсинга ответов Supabase
@@ -35,7 +37,7 @@ struct SupabaseUserResponse {
 
 #[derive(Deserialize)]
 struct SupabaseAuthResponse {
-    access_token: String,
+    access_token: Option<String>,
     user: SupabaseUserResponse,
 }
 
@@ -67,6 +69,8 @@ pub async fn email_login(
         Ok(Json(AuthResponse {
             user_id: auth_res.user.id,
             email: auth_res.user.email,
+            access_token: None, // При регистрации токена нет
+            message: Some("Письмо для подтверждения отправлено на вашу почту.".to_string()),
         }))
     } else {
         Err(StatusCode::UNAUTHORIZED)
