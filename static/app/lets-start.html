@@ -1,23 +1,72 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <title>YatoChain - Start</title>
     <link rel="stylesheet" href="../style.css"> <!-- Если css в папке выше, замени на ../style.css -->
     <style>
         /* Кастомные стили только для сплит-лейаута, которых нет в основном CSS */
-        .auth-layout { display: flex; height: 100vh; }
-        .auth-left { flex: 1; display: flex; justify-content: center; align-items: center; padding: var(--spacing-lg); }
-        .auth-right { flex: 1; display: flex; justify-content: center; align-items: center; background-color: var(--bg-secondary); border-left: 1px solid var(--border-color); }
-        .auth-right img { max-width: 80%; max-height: 80%; object-fit: contain; border-radius: var(--radius-lg); }
-        .auth-card { width: 100%; max-width: 400px; }
-        .auth-tabs { display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); }
-        .auth-tabs .btn { flex: 1; }
-        .auth-form { display: none; }
-        .auth-form.active { display: block; }
-        .auth-msg { margin-top: var(--spacing-md); text-align: center; font-size: 0.875rem; }
+        .auth-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        .auth-left {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-lg);
+        }
+
+        .auth-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-secondary);
+            border-left: 1px solid var(--border-color);
+        }
+
+        .auth-right img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            border-radius: var(--radius-lg);
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .auth-tabs .btn {
+            flex: 1;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-msg {
+            margin-top: var(--spacing-md);
+            text-align: center;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
+
 <body>
     <div class="auth-layout">
         <div class="auth-left">
@@ -57,7 +106,8 @@
                             <label class="form-label">Пароль</label>
                             <input type="password" name="password" class="form-input" placeholder="••••••••" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Создать аккаунт</button>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Создать
+                            аккаунт</button>
                         <div id="register-msg" class="auth-msg"></div>
                     </form>
 
@@ -102,8 +152,30 @@
                 });
 
                 if (res.ok) {
-                    msgEl.textContent = 'Успешно!';
-                    msgEl.style.color = 'var(--color-success)';
+                    const data = await res.json(); // Получаем JSON от бэкенда
+
+                    if (data.message) {
+                        // Это сработает при регистрации (покажет сообщение о письме)
+                        msgEl.textContent = data.message;
+                        msgEl.style.color = 'var(--color-success)';
+                        form.reset(); // Очищаем поля формы после успешной регистрации
+                    } else if (data.access_token) {
+                        // Это сработает при успешном входе
+                        localStorage.setItem('access_token', data.access_token);
+                        localStorage.setItem('user_id', data.user_id);
+                        localStorage.setItem('user_email', data.email);
+
+                        msgEl.textContent = 'Вход выполнен! Перенаправление...';
+                        msgEl.style.color = 'var(--color-success)';
+
+                        // Автоматический переход на dashboard через полсекунды
+                        setTimeout(() => {
+                            window.location.href = '/dashboard.html';
+                        }, 500);
+                    } else {
+                        msgEl.textContent = 'Успешно!';
+                        msgEl.style.color = 'var(--color-success)';
+                    }
                 } else {
                     msgEl.textContent = 'Ошибка. Проверьте данные.';
                     msgEl.style.color = 'var(--color-danger)';
@@ -115,4 +187,5 @@
         }
     </script>
 </body>
+
 </html>
