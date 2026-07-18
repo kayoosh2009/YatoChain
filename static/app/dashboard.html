@@ -4,124 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YatoChain - Dashboard</title>
-    <!-- Укажи правильный путь к style.css, если он лежит в другой папке (например, ../style.css) -->
+    <!-- Путь к стилям, если файл лежит в папке app/ -->
     <link rel="stylesheet" href="../style.css">
     <style>
-        /* Стили специально для бургер-меню, которых нет в основном style.css */
-        .burger-menu {
-            display: none; /* Скрыто на десктопе */
-            flex-direction: column;
-            gap: 5px;
+        /* Кастомные стили для этого макета */
+        .navbar-content {
+            display: flex;
+            align-items: center;
+        }
+        .navbar-logo {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+        /* Центрируем время */
+        .server-time {
+            flex: 1;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        /* Кнопка меню */
+        .menu-btn {
             background: none;
             border: none;
             cursor: pointer;
-            padding: var(--spacing-sm);
-            z-index: 1001;
+            padding: 0;
+            display: flex;
+            align-items: center;
         }
-        .burger-menu span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background-color: var(--text-primary);
-            border-radius: 2px;
-            transition: all 0.3s ease;
+        .menu-btn img {
+            height: 32px;
+            width: 32px;
+            /* Если твоя иконка menu.png темная, раскомментируй строку ниже, чтобы она стала белой */
+            /* filter: invert(1); */ 
         }
-
-        /* Адаптивность для мобильных устройств */
-        @media (max-width: 768px) {
-            .burger-menu {
-                display: flex; /* Показываем 3 линии на мобильных */
-            }
-            .nav-menu {
-                display: none; /* Скрываем горизонтальное меню по умолчанию */
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background-color: var(--bg-secondary);
-                flex-direction: column;
-                padding: var(--spacing-md);
-                border-bottom: 1px solid var(--border-color);
-                box-shadow: var(--shadow-md);
-                gap: var(--spacing-md);
-            }
-            .nav-menu.active {
-                display: flex; /* Показываем меню при добавлении класса active */
-            }
+        /* Стили для EXP */
+        .exp-text {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            margin-top: var(--spacing-sm);
+        }
+        /* Контейнер для списка токенов */
+        .token-list-card {
+            margin-top: var(--spacing-lg);
+            min-height: 400px;
+        }
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: var(--spacing-xl) 0;
         }
     </style>
 </head>
 <body>
-    <!-- Навбар -->
+
+    <!-- 1. НАВБАР -->
     <nav class="navbar">
         <div class="navbar-content">
-            <a href="#" class="logo">YatoChain</a>
-            
-            <!-- Основное меню -->
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#" class="nav-link active">Dashboard</a></li>
-                <li><a href="#" class="nav-link">Торговля</a></li>
-                <li><a href="#" class="nav-link">Портфель</a></li>
-                <li><a href="#" class="nav-link">Настройки</a></li>
-            </ul>
+            <!-- Слева: Логотип -->
+            <a href="#" class="navbar-logo-link">
+                <img src="../img/logo.png" alt="Logo" class="navbar-logo">
+            </a>
 
-            <!-- Кнопка бургер-меню (3 линии) -->
-            <button class="burger-menu" id="burgerBtn" aria-label="Открыть меню">
-                <span></span>
-                <span></span>
-                <span></span>
+            <!-- Центр: Время сервера -->
+            <div class="server-time" id="serverTime">00:00:00</div>
+
+            <!-- Справа: Кнопка меню -->
+            <button class="menu-btn" id="menuToggle">
+                <img src="../img/menu.png" alt="Menu">
             </button>
         </div>
     </nav>
 
-    <!-- Основной контент страницы -->
-    <main class="container" style="padding-top: var(--spacing-xl);">
-        <div class="card fade-in">
+    <!-- 2. ОСНОВНОЙ КОНТЕНТ -->
+    <main class="container" style="padding-top: var(--spacing-lg);">
+        
+        <!-- Рамка с балансом и EXP -->
+        <div class="balance-card fade-in">
+            <div class="balance-label">Ваш баланс</div>
+            <div class="balance-amount">$0.00</div>
+            <div class="exp-text">0 EXP</div>
+        </div>
+
+        <!-- Список токенов (пока пустой) -->
+        <div class="card token-list-card fade-in">
             <div class="card-header">
-                <h2 class="card-title">Панель управления</h2>
-                <span class="badge badge-success">Активен</span>
+                <h3 class="card-title">Список токенов</h3>
             </div>
             <div class="card-body">
-                <p>Добро пожаловать в YatoChain! Здесь будет располагаться ваш торговый интерфейс, графики и статистика.</p>
-                <div class="mt-3">
-                    <button class="btn btn-primary">Начать торговлю</button>
-                    <button class="btn btn-outline">Пополнить баланс</button>
+                <div class="empty-state">
+                    <p>Список токенов пока пуст.</p>
                 </div>
+                <!-- Сюда потом добавим сами токены -->
             </div>
         </div>
+
     </main>
 
-    <!-- Скрипт для работы бургер-меню -->
     <script>
-        const burgerBtn = document.getElementById('burgerBtn');
-        const navMenu = document.getElementById('navMenu');
+        // Часы (пока показывают локальное время, потом заменим на реальное серверное)
+        function updateTime() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('serverTime').textContent = `${h}:${m}:${s}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
 
-        burgerBtn.addEventListener('click', () => {
-            // Переключаем класс active у меню
-            navMenu.classList.toggle('active');
-            
-            // Простая анимация превращения 3 линий в крестик (опционально)
-            const spans = burgerBtn.querySelectorAll('span');
-            if (navMenu.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 6px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(5px, -6px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            }
-        });
-
-        // Закрытие меню при клике вне его области
-        document.addEventListener('click', (e) => {
-            if (!burgerBtn.contains(e.target) && !navMenu.contains(e.target)) {
-                navMenu.classList.remove('active');
-                const spans = burgerBtn.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            }
+        // Клик по кнопке меню (заглушка)
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            console.log('Открываем боковое меню...');
+            // Тут будет логика открытия менюшки
         });
     </script>
 </body>
