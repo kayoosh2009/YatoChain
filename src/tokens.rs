@@ -21,7 +21,7 @@ pub struct CreateTokenResponse {
 
 pub async fn create_token(
     State(state): State<AppState>,
-    headers: HeaderMap,
+    _headers: HeaderMap, // <-- ДОБАВИЛИ НИЖНЕЕ ПОДЧЕРКИВАНИЕ ПЕРЕД headers
     Json(req): Json<CreateTokenRequest>,
 ) -> Result<Json<CreateTokenResponse>, StatusCode> {
     
