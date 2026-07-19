@@ -18,9 +18,9 @@ async fn main() {
     let app = Router::new()
         .route("/auth/register", post(auth::email_register))
         .route("/auth/email", post(auth::email_login))
+        .route("/tokens/create", axum::routing::post(tokens::create_token))
         .fallback_service(ServeDir::new("static"))
         .with_state(state);
-        .route("/tokens/create", axum::routing::post(tokens::create_token)) // <-- ДОБАВИТЬ
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     tracing::info!("Server on {}", addr);
