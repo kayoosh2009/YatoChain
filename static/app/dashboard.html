@@ -79,6 +79,80 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
+                /* --- Стили для боковой панели меню --- */
+        .side-panel {
+            position: fixed;
+            top: 0;
+            left: -300px; /* Скрыто за левым краем экрана */
+            width: 280px;
+            height: 100vh;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            transition: left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: var(--spacing-lg);
+        }
+        .side-panel.active {
+            left: 0; /* Выезжает при добавлении класса active */
+        }
+        .side-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .side-panel-nav {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            flex: 1;
+        }
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        .side-link:hover, .side-link.active {
+            background-color: var(--bg-tertiary);
+            color: var(--color-warning);
+        }
+        /* Затемнение фона при открытом меню */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
