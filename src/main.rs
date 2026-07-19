@@ -5,6 +5,7 @@ use tower_http::services::ServeDir;
 
 mod database;
 mod auth;
+mod tokens;
 
 #[tokio::main]
 async fn main() {
@@ -19,6 +20,7 @@ async fn main() {
         .route("/auth/email", post(auth::email_login))
         .fallback_service(ServeDir::new("static"))
         .with_state(state);
+        .route("/tokens/create", axum::routing::post(tokens::create_token)) // <-- ДОБАВИТЬ
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     tracing::info!("Server on {}", addr);
