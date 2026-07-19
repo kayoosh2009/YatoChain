@@ -105,23 +105,20 @@
 
     </main>
 
-    <script>
-        // Часы (пока показывают локальное время, потом заменим на реальное серверное)
-        function updateTime() {
-            const now = new Date();
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('serverTime').textContent = `${h}:${m}:${s}`;
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
+        <script>
+            // Логика для бургер-меню (кнопка с картинкой menu.png)
+            const menuBtn = document.getElementById('menuToggle');
+            const sideMenu = document.getElementById('sideMenu'); // Само меню мы добавим на следующем шаге
 
-        // Клик по кнопке меню (заглушка)
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            console.log('Открываем боковое меню...');
-            // Тут будет логика открытия менюшки
-        });
-    </script>
+            if (menuBtn) {
+                menuBtn.addEventListener('click', () => {
+                    if (sideMenu) {
+                        sideMenu.classList.toggle('active');
+                    } else {
+                        console.log('Меню нажато! Сейчас добавим само меню.');
+                    }
+                });
+            }
+        </script>
 </body>
 </html>
