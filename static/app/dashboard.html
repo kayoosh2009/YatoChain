@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YatoChain - Dashboard</title>
-    <!-- Путь к стилям, если файл лежит в папке app/ -->
     <link rel="stylesheet" href="../style.css">
     <style>
         /* Кастомные стили для этого макета */
@@ -17,7 +16,6 @@
             width: auto;
             display: block;
         }
-        /* Центрируем время */
         .server-time {
             flex: 1;
             text-align: center;
@@ -26,7 +24,6 @@
             color: var(--text-primary);
             font-weight: 600;
         }
-        /* Кнопка меню */
         .menu-btn {
             background: none;
             border: none;
@@ -38,17 +35,13 @@
         .menu-btn img {
             height: 32px;
             width: 32px;
-            /* Если твоя иконка menu.png темная, раскомментируй строку ниже, чтобы она стала белой */
-            /* filter: invert(1); */ 
         }
-        /* Стили для EXP */
         .exp-text {
             font-size: 1rem;
             color: var(--text-muted);
             font-family: var(--font-mono);
             margin-top: var(--spacing-sm);
         }
-        /* Контейнер для списка токенов */
         .token-list-card {
             margin-top: var(--spacing-lg);
             min-height: 400px;
@@ -58,6 +51,34 @@
             color: var(--text-muted);
             padding: var(--spacing-xl) 0;
         }
+
+        /* --- НОВЫЕ СТИЛИ ДЛЯ КРАСИВОГО ОТОБРАЖЕНИЯ РЕКЛАМЫ --- */
+        .ad-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: var(--spacing-md) auto;
+            padding: var(--spacing-md);
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            max-width: 340px; /* Чуть больше самого баннера для "воздуха" */
+            position: relative;
+        }
+        .ad-label {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--bg-primary);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
@@ -65,23 +86,29 @@
     <!-- 1. НАВБАР -->
     <nav class="navbar">
         <div class="navbar-content">
-            <!-- Слева: Логотип -->
             <a href="#" class="navbar-logo-link">
                 <img src="../img/logo.png" alt="Logo" class="navbar-logo">
             </a>
-
-            <!-- Центр: Время сервера -->
             <div class="server-time" id="serverTime">00:00:00</div>
-
-            <!-- Справа: Кнопка меню -->
             <button class="menu-btn" id="menuToggle">
                 <img src="../img/menu.png" alt="Menu">
             </button>
         </div>
     </nav>
 
+    <!-- 🟢 МЕСТО ДЛЯ РЕКЛАМЫ №1 (Сразу под навбаром) -->
+    <div class="ad-wrapper">
+        <span class="ad-label">Реклама</span>
+        <!-- BEGIN AADS AD UNIT 2448442 -->
+        <div id="frame-top" style="width: 320px; height: auto;">
+            <iframe data-aa='2448442' src='//ad.a-ads.com/2448442/?size=320x100&background_color=1C1C1C&title_color=F0B90B'
+                    style='border:0; padding:0; width:320px; height:100px; overflow:hidden; display: block; margin: auto;'></iframe>
+        </div>
+        <!-- END AADS AD UNIT 2448442 -->
+    </div>
+
     <!-- 2. ОСНОВНОЙ КОНТЕНТ -->
-    <main class="container" style="padding-top: var(--spacing-lg);">
+    <main class="container" style="padding-top: var(--spacing-sm);">
         
         <!-- Рамка с балансом и EXP -->
         <div class="balance-card fade-in">
@@ -99,26 +126,39 @@
                 <div class="empty-state">
                     <p>Список токенов пока пуст.</p>
                 </div>
-                <!-- Сюда потом добавим сами токены -->
             </div>
+        </div>
+
+        <!-- 🟢 МЕСТО ДЛЯ РЕКЛАМЫ №2 (Внизу страницы, перед концом main) -->
+        <div class="ad-wrapper" style="margin-top: var(--spacing-xl);">
+            <span class="ad-label">Реклама</span>
+            <!-- BEGIN AADS AD UNIT 2448442 -->
+            <div id="frame-bottom" style="width: 320px; height: auto;">
+                <iframe data-aa='2448442' src='//ad.a-ads.com/2448442/?size=320x100&background_color=1C1C1C&title_color=F0B90B'
+                        style='border:0; padding:0; width:320px; height:100px; overflow:hidden; display: block; margin: auto;'></iframe>
+            </div>
+            <!-- END AADS AD UNIT 2448442 -->
         </div>
 
     </main>
 
-        <script>
-            // Логика для бургер-меню (кнопка с картинкой menu.png)
-            const menuBtn = document.getElementById('menuToggle');
-            const sideMenu = document.getElementById('sideMenu'); // Само меню мы добавим на следующем шаге
+    <script>
+        // Часы
+        function updateTime() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('serverTime').textContent = `${h}:${m}:${s}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
 
-            if (menuBtn) {
-                menuBtn.addEventListener('click', () => {
-                    if (sideMenu) {
-                        sideMenu.classList.toggle('active');
-                    } else {
-                        console.log('Меню нажато! Сейчас добавим само меню.');
-                    }
-                });
-            }
-        </script>
+        // Клик по кнопке меню
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            console.log('Открываем боковое меню...');
+            // Тут будет логика открытия менюшки
+        });
+    </script>
 </body>
 </html>
