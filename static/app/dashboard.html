@@ -200,7 +200,7 @@
     </main>
 
     <script>
-        // Часы
+        // 1. Часы
         function updateTime() {
             const now = new Date();
             const h = String(now.getHours()).padStart(2, '0');
@@ -211,11 +211,45 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // Клик по кнопке меню
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            console.log('Открываем боковое меню...');
-            // Тут будет логика открытия менюшки
-        });
+        // 2. Логика бокового меню
+        const menuToggle = document.getElementById('menuToggle');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeMenuBtn = document.getElementById('closeMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        function openMenu() {
+            sideMenu.classList.add('active');
+            menuOverlay.classList.add('active');
+        }
+
+        function closeMenu() {
+            sideMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+        }
+
+        if (menuToggle) menuToggle.addEventListener('click', openMenu);
+        if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+        if (menuOverlay) menuOverlay.addEventListener('click', closeMenu); // Закрыть при клике на фон
     </script>
+
+        <!-- Затемнение фона -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Боковая панель меню -->
+    <aside class="side-panel" id="sideMenu">
+        <div class="side-panel-header">
+            <h3 style="margin: 0; color: var(--color-warning);">Меню</h3>
+            <button class="close-btn" id="closeMenu">&times;</button>
+        </div>
+        <nav class="side-panel-nav">
+            <a href="#" class="side-link active">📊 Главная</a>
+            <a href="#" class="side-link">🪙 Создать токен</a>
+            <a href="#" class="side-link">📈 Торговля</a>
+            <a href="#" class="side-link">💼 Портфель</a>
+            <a href="#" class="side-link">⚙️ Настройки</a>
+            <a href="#" class="side-link" style="color: var(--color-danger); margin-top: auto;">🚪 Выйти</a>
+        </nav>
+    </aside>
+
 </body>
 </html>
