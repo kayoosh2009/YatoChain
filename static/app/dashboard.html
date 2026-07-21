@@ -93,28 +93,24 @@
         .side-panel {
             position: fixed !important;
             top: 0 !important;
-            left: 0 !important;
-            /* Базовая позиция - левый край */
-            right: auto !important;
-            /* Жёсткий запрет на привязку к правому краю */
-            transform: translateX(-100%) !important;
-            /* Гарантированно убираем за левый край экрана */
+            right: 0 !important; /* Привязываем к правому краю */
+            left: auto !important;
+            transform: translateX(100%) !important; /* Гарантированно убираем за ПРАВЫЙ край экрана */
             width: 280px !important;
             height: 100vh !important;
             background-color: var(--bg-secondary) !important;
-            border-right: 1px solid var(--border-color) !important;
+            border-left: 1px solid var(--border-color) !important; /* Граница теперь слева от панели */
+            border-right: none !important;
             box-shadow: var(--shadow-lg) !important;
             z-index: 2000 !important;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            /* Плавная анимация */
             display: flex !important;
             flex-direction: column !important;
             padding: var(--spacing-lg) !important;
         }
 
         .side-panel.active {
-            transform: translateX(0) !important;
-            /* Выезжает на исходную позицию (слева) */
+            transform: translateX(0) !important; /* Выезжает на экран справа */
         }
 
         .side-panel-header {
