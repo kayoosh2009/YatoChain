@@ -1,0 +1,271 @@
+.navbar-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-logo {
+            height: 40px;
+            width: auto;
+            display: block;
+        }
+
+        .server-time {
+            flex: 1;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-btn img {
+            height: 32px;
+            width: 32px;
+        }
+
+        .exp-text {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            margin-top: var(--spacing-sm);
+        }
+
+        .token-list-card {
+            margin-top: var(--spacing-lg);
+            min-height: 400px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-muted);
+            padding: var(--spacing-xl) 0;
+        }
+
+        /* --- НОВЫЕ СТИЛИ ДЛЯ КРАСИВОГО ОТОБРАЖЕНИЯ РЕКЛАМЫ --- */
+        .ad-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: var(--spacing-md) auto;
+            padding: var(--spacing-md);
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            max-width: 340px;
+            /* Чуть больше самого баннера для "воздуха" */
+            position: relative;
+        }
+
+        .ad-label {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--bg-primary);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- Стили для боковой панели меню (СПРАВА) --- */
+        .side-panel {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0 !important; 
+            left: auto !important;
+            transform: translateX(100%) !important; 
+            width: 320px !important; /* Увеличили ширину с 280px до 320px */
+            height: 100vh !important;
+            background-color: var(--bg-secondary) !important;
+            border-left: 1px solid var(--border-color) !important; 
+            border-right: none !important;
+            box-shadow: var(--shadow-lg) !important;
+            z-index: 2000 !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding: var(--spacing-lg) !important;
+        }
+
+        .side-panel.active {
+            transform: translateX(0) !important; 
+        }
+
+        /* Шапка с профилем */
+        .side-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-full);
+            object-fit: cover;
+            border: 2px solid var(--color-warning);
+        }
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            line-height: 1.2;
+        }
+        .page-name {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Навигация и иконки */
+        .side-panel-nav {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+            flex: 1;
+        }
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        .side-link:hover, .side-link.active {
+            background-color: var(--bg-tertiary);
+            color: var(--color-warning);
+        }
+        .side-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            /* Если иконки черные и их не видно на темном фоне, раскомментируй строку ниже: */
+            /* filter: invert(1) brightness(1.5); */ 
+        }
+
+        /* Футер с кнопками */
+        .side-panel-footer {
+            margin-top: auto; /* Прижимает футер к самому низу */
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        .footer-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-xs);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .logout-btn {
+            background-color: rgba(246, 70, 93, 0.1);
+            color: var(--color-danger);
+            border: 1px solid rgba(246, 70, 93, 0.3);
+        }
+        .logout-btn:hover {
+            background-color: rgba(246, 70, 93, 0.2);
+            color: var(--color-danger);
+        }
+        .telegram-btn {
+            background-color: rgba(74, 144, 226, 0.1);
+            color: var(--color-info);
+            border: 1px solid rgba(74, 144, 226, 0.3);
+        }
+        .telegram-btn:hover {
+            background-color: rgba(74, 144, 226, 0.2);
+            color: var(--color-info);
+        }
+        .footer-icon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .side-panel-nav {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+            flex: 1;
+        }
+
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .side-link:hover,
+        .side-link.active {
+            background-color: var(--bg-tertiary);
+            color: var(--color-warning);
+        }
+
+        /* Затемнение фона при открытом меню */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
