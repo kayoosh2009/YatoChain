@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +12,13 @@
             display: flex;
             align-items: center;
         }
+
         .navbar-logo {
             height: 40px;
             width: auto;
             display: block;
         }
+
         .server-time {
             flex: 1;
             text-align: center;
@@ -24,6 +27,7 @@
             color: var(--text-primary);
             font-weight: 600;
         }
+
         .menu-btn {
             background: none;
             border: none;
@@ -32,20 +36,24 @@
             display: flex;
             align-items: center;
         }
+
         .menu-btn img {
             height: 32px;
             width: 32px;
         }
+
         .exp-text {
             font-size: 1rem;
             color: var(--text-muted);
             font-family: var(--font-mono);
             margin-top: var(--spacing-sm);
         }
+
         .token-list-card {
             margin-top: var(--spacing-lg);
             min-height: 400px;
         }
+
         .empty-state {
             text-align: center;
             color: var(--text-muted);
@@ -62,9 +70,11 @@
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            max-width: 340px; /* Чуть больше самого баннера для "воздуха" */
+            max-width: 340px;
+            /* Чуть больше самого баннера для "воздуха" */
             position: relative;
         }
+
         .ad-label {
             position: absolute;
             top: -10px;
@@ -81,24 +91,32 @@
         }
 
         .side-panel {
-            position: fixed;
-            top: 0;
-            left: -300px; /* Гарантированно прячем за ЛЕВЫЙ край */
-            width: 280px;
-            height: 100vh;
-            background-color: var(--bg-secondary);
-            border-right: 1px solid var(--border-color);
-            box-shadow: var(--shadow-lg);
-            z-index: 2000;
-            transition: left 0.3s ease; /* Анимация изменения свойства left */
-            display: flex;
-            flex-direction: column;
-            padding: var(--spacing-lg);
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            /* Базовая позиция - левый край */
+            right: auto !important;
+            /* Жёсткий запрет на привязку к правому краю */
+            transform: translateX(-100%) !important;
+            /* Гарантированно убираем за левый край экрана */
+            width: 280px !important;
+            height: 100vh !important;
+            background-color: var(--bg-secondary) !important;
+            border-right: 1px solid var(--border-color) !important;
+            box-shadow: var(--shadow-lg) !important;
+            z-index: 2000 !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            /* Плавная анимация */
+            display: flex !important;
+            flex-direction: column !important;
+            padding: var(--spacing-lg) !important;
         }
 
         .side-panel.active {
-            left: 0; /* Выезжает слева при добавлении класса active */
+            transform: translateX(0) !important;
+            /* Выезжает на исходную позицию (слева) */
         }
+
         .side-panel-header {
             display: flex;
             justify-content: space-between;
@@ -107,6 +125,7 @@
             padding-bottom: var(--spacing-md);
             border-bottom: 1px solid var(--border-color);
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -115,12 +134,14 @@
             cursor: pointer;
             line-height: 1;
         }
+
         .side-panel-nav {
             display: flex;
             flex-direction: column;
             gap: var(--spacing-sm);
             flex: 1;
         }
+
         .side-link {
             display: flex;
             align-items: center;
@@ -132,10 +153,13 @@
             transition: all 0.2s ease;
             font-weight: 500;
         }
-        .side-link:hover, .side-link.active {
+
+        .side-link:hover,
+        .side-link.active {
             background-color: var(--bg-tertiary);
             color: var(--color-warning);
         }
+
         /* Затемнение фона при открытом меню */
         .menu-overlay {
             position: fixed;
@@ -149,12 +173,14 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
+
         .menu-overlay.active {
             opacity: 1;
             visibility: visible;
         }
     </style>
 </head>
+
 <body>
 
     <!-- 1. НАВБАР -->
@@ -171,13 +197,14 @@
     </nav>
 
     <div id="frame" style="width: 320px;margin: auto;z-index: 99998;height: auto">
-      <iframe data-aa='2448442' src='//ad.a-ads.com/2448442/?size=320x50&background_color=1C1C1C&title_color=F0B90B&title_hover_color=4A90E2'
-                        style='border:0; padding:0; width:320px; height:50px; overflow:hidden;display: block;margin: auto'></iframe>
+        <iframe data-aa='2448442'
+            src='//ad.a-ads.com/2448442/?size=320x50&background_color=1C1C1C&title_color=F0B90B&title_hover_color=4A90E2'
+            style='border:0; padding:0; width:320px; height:50px; overflow:hidden;display: block;margin: auto'></iframe>
     </div>
 
     <!-- 2. ОСНОВНОЙ КОНТЕНТ -->
     <main class="container" style="padding-top: var(--spacing-sm);">
-        
+
         <!-- Рамка с балансом и EXP -->
         <div class="balance-card fade-in">
             <div class="balance-label">Ваш баланс</div>
@@ -199,7 +226,7 @@
 
     </main>
 
-        <!-- Боковая панель меню -->
+    <!-- Боковая панель меню -->
     <aside class="side-panel" id="sideMenu">
         <div class="side-panel-header">
             <h3 style="margin: 0; color: var(--color-warning);">Меню</h3>
@@ -252,4 +279,5 @@
     </script>
 
 </body>
+
 </html>
