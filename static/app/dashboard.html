@@ -80,24 +80,24 @@
             letter-spacing: 0.5px;
         }
 
-                /* --- Стили для боковой панели меню --- */
         .side-panel {
             position: fixed;
             top: 0;
-            left: -300px; /* Скрыто за левым краем экрана */
+            left: -300px; /* Гарантированно прячем за ЛЕВЫЙ край */
             width: 280px;
             height: 100vh;
             background-color: var(--bg-secondary);
             border-right: 1px solid var(--border-color);
             box-shadow: var(--shadow-lg);
             z-index: 2000;
-            transition: left 0.3s ease;
+            transition: left 0.3s ease; /* Анимация изменения свойства left */
             display: flex;
             flex-direction: column;
             padding: var(--spacing-lg);
         }
+
         .side-panel.active {
-            left: 0; /* Выезжает при добавлении класса active */
+            left: 0; /* Выезжает слева при добавлении класса active */
         }
         .side-panel-header {
             display: flex;
@@ -215,7 +215,8 @@
         </nav>
     </aside>
 
-    <!-- 👇 ВСТАВЬ СЮДА 👇 -->
+    <div class="menu-overlay" id="menuOverlay"></div>
+
     <script>
         // 1. Часы
         function updateTime() {
