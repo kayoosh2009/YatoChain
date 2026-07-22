@@ -13,12 +13,12 @@
         <div class="auth-left">
             <div class="auth-card card">
                 <div class="card-header" style="border-bottom: none; padding-bottom: 0;">
-                    <h2 class="card-title" style="margin-bottom: 0;">Добро пожаловать</h2>
+                    <h2 class="card-title" style="margin-bottom: 0;">Welcome</h2>
                 </div>
                 <div class="card-body">
                     <div class="auth-tabs">
-                        <button class="btn btn-primary" onclick="switchTab('login', this)">Вход</button>
-                        <button class="btn btn-outline" onclick="switchTab('register', this)">Регистрация</button>
+                        <button class="btn btn-primary" onclick="switchTab('login', this)">Login</button>
+                        <button class="btn btn-outline" onclick="switchTab('register', this)">Register</button>
                     </div>
 
                     <form id="login" class="auth-form active" onsubmit="submitForm(event, '/auth/email')">
@@ -27,7 +27,7 @@
                             <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Пароль</label>
+                            <label class="form-label">Password</label>
                             <input type="password" name="password" class="form-input" placeholder="••••••••" required>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Войти</button>
@@ -36,19 +36,18 @@
 
                     <form id="register" class="auth-form" onsubmit="submitForm(event, '/auth/register')">
                         <div class="form-group">
-                            <label class="form-label">Никнейм</label>
-                            <input type="text" name="nickname" class="form-input" placeholder="Ваш никнейм" required>
+                            <label class="form-label">Nickname</label>
+                            <input type="text" name="nickname" class="form-input" placeholder="Your nickname" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email</label>
                             <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Пароль</label>
+                            <label class="form-label">Password</label>
                             <input type="password" name="password" class="form-input" placeholder="••••••••" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Создать
-                            аккаунт</button>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">Create account</button>
                         <div id="register-msg" class="auth-msg"></div>
                     </form>
 
@@ -82,7 +81,7 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
 
-            msgEl.textContent = 'Загрузка...';
+            msgEl.textContent = 'Loading...';
             msgEl.style.color = 'var(--color-info)';
 
             try {
